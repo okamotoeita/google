@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>当選おめでとうございます。</title>
+  <title>iPhone当選ページ</title>
   <style>
-        body {
+    body {
       font-family: Arial, sans-serif;
       margin: 0;
       overflow: hidden;
     }
-        .overlay {
+    .overlay {
       position: fixed;
       top: 0;
       left: 0;
@@ -25,15 +25,23 @@
     .popup {
       width: 90%;
       max-width: 400px;
-            background-color: #fff;
+      background-color: #fff;
       padding: 20px;
       border-radius: 8px;
       text-align: center;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       animation: fadeIn 0.5s ease;
     }
-    
-   h1 {
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .icon {
+      font-size: 50px;
+      color: #e63946;
+      margin-bottom: 10px;
+    }
+    h1 {
       font-size: 1.8em;
       color: #333;
       margin-bottom: 10px;
@@ -90,8 +98,6 @@
   </style>
 </head>
 <body>
-  <!-- 他のポップアップ部分も前回のまま -->
-
   <div class="overlay" id="popup1">
     <div class="popup">
       <div class="icon">🎉</div>
@@ -99,22 +105,49 @@
       <p class="message">あなたは本日のキャンペーンで</p>
       <p class="message"><strong>iPhone 16</strong>が当選しました！</p>
       <p class="message">残りの受け取り時間:</p>
-      <div class="timer" id="timer">05:00</div>
+      <div class="timer" id="timer">01:00</div>
       <button class="button" onclick="showNextPopup()">今すぐ受け取る</button>
     </div>
   </div>
 
-  <script>
-    // 300秒（5分）に設定
-    let timeLeft = 300;
-    const timerElement = document.getElementById("timer");
+  <div class="overlay" id="popup2" style="display: none;">
+    <div class="popup">
+      <h1>賞品の確認中...</h1>
+      <div class="loader"></div>
+      <p class="message">少々お待ちください...</p>
+    </div>
+  </div>
 
+  <div class="overlay" id="popup3" style="display: none;">
+    <div class="popup">
+      <h1>最終ステップ - アンケート</h1>
+      <p class="message">賞品を受け取るには、以下のアンケートにお答えください。</p>
+      <div class="question">
+        <p>Q1. 今のご職業は？</p>
+        <input class="answer" type="text" id="q1" placeholder="例：会社員">
+      </div>
+      <div class="question">
+        <p>Q2. 週に何時間インターネットを利用しますか？</p>
+        <input class="answer" type="text" id="q2" placeholder="例：10時間">
+      </div>
+      <button class="button" onclick="submitSurvey()">アンケートを完了して受け取る</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="popup4" style="display: none;">
+    <div class="popup">
+      <h1>ありがとうございます！</h1>
+      <p class="message">アンケートにご協力いただきありがとうございます。</p>
+      <button class="button" onclick="claimPrize()">賞品を受け取る</button>
+    </div>
+  </div>
+
+  <script>
+    let timeLeft = 60;
+    const timerElement = document.getElementById("timer");
     const countdown = setInterval(() => {
       timeLeft--;
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
-      timerElement.innerText = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-      
+      timerElement.innerText = `00:${timeLeft < 10 ? '0' + timeLeft : timeLeft}`;
       if (timeLeft <= 0) {
         clearInterval(countdown);
         alert("時間切れ！再度ページを更新してください。");
